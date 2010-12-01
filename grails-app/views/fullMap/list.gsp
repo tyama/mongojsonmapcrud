@@ -16,6 +16,12 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+			<div>
+				<g:form name="list" action="list">
+					<span>Search.</span> <g:textField name="query" value="${params.query?:''}" style="width:600;padding:4px"/>
+				</g:form>
+				<div style="margin:3px">Ex. [ name:searchString tel:000-000-0000] or [keyword_to_search]</div>
+			</div>
             <div class="list">
                 <table>
                     <thead>

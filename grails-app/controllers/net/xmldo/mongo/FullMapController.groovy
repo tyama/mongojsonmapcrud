@@ -37,11 +37,24 @@ class FullMapController {
     }
 
     def list = {
+		def query = [:] as BasicDBObject
+		if(params.query && params.query.trim()!='' && params.query.contains(':')){
+			def slist = params.query.split(' ')
+			slist.each{
+				if(it.contains(':') && it.split(':').size()==2){
+					def (k,v)=it.split(':')
+					query.append(k,~/(?i).*${this.escapeRegex(v)}.*/) // ilike '%文字%'
+				}
+			}
+		}else if(params.query && params.query.trim()!=''){
+			query.append('name',~/(?i).*${this.escapeRegex(params.query)}.*/) // ilike '%文字%'
+		}
+
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		params.offset = params.offset ? params.int('offset') : 0
 		def collection = this.getDBCollection()
 
-		DBCursor dbCursor = collection.find().skip(params.offset).limit(params.max)
+		DBCursor dbCursor = collection.find(query).skip(params.offset).limit(params.max)
 		def list = dbCursor.toArray()
 
         [list: list, count: dbCursor.count()]
