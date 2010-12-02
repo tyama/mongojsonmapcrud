@@ -88,7 +88,7 @@ log4j = {
 
 grails {
   mongo {
-    host = "10.211.55.3"
+    host = "127.0.0.1"
     port = 27017
     //username = "user"
     //password = "pass"
